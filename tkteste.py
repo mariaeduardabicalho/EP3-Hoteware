@@ -17,18 +17,24 @@ class MeuAplicativo:
         self.window.columnconfigure(0, minsize=120, weight=1)
         self.window.columnconfigure(1, weight=1)
         self.botao=tk.Button(self.window)
-        self.botao.grid()
         self.botao.configure(text='Servico de quarto')
+        #self.botao.configure(command=self.servicodequarto)
+        self.botao.grid()
         self.bo=tk.Button(self.window)
         self.bo.grid()
         self.bo.configure(text='infos')
+        self.botao.configure(command=self.informacoes)
         self.window.mainloop()
 
+        
     def iniciar(self):
         self.window.mainloop()
     
-    def apertou_enter(self, bo, botao):
-        self.bo()
+    #def apertou_enter(self, bo, botao):
+       # self.bo()
+
+    def informacoes(self):
+        print('Horário de abertura e encerramento do café: 7:30-11:00 \n Horário de almoco:12:00-15:00 \n Fechamento da piscina:17:00')
     
     def postar(self):
         self.conteudo_label.set(self.conteudo_caixa_texto.get())
