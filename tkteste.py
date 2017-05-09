@@ -22,10 +22,6 @@ class hotel:
 		self.bo.configure(text='hospede')
 		self.bo.configure(command=self.whospede)
 
-		self.menubar = tk.Menu(self.window)
-		self.menubar.add_command(label="Hello!", command=self.hello)
-		self.menubar.add_command(label="Quit!", command=self.window.quit)
-		self.window.config(menu=self.menubar)
 		
 		#caixa_texto.configure(textvariable=self.conteudo_inf)
 		#caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
@@ -52,6 +48,11 @@ class hotel:
 		self.tela_user= tk.Toplevel()
 		self.tela_user.geometry("800x400+0+0")
 		self.tela_user.title("Tela hospede")
+
+		self.menubar = tk.Menu(self.tela_user)
+		self.menubar.add_command(label="Inform", command=self.inform)
+		self.menubar.add_command(label="Quit", command=self.tela_user.quit)
+		self.tela_user.config(menu=self.menubar)
 		"""
 		self.bhi=tk.Button(self.tela_user)
 		self.bhi.grid()
@@ -60,8 +61,8 @@ class hotel:
 		"""
 
 
-	def hello(self):
-		print("hello!")
+	def inform(self):
+		
 
 
 	#def infos(self):
@@ -82,7 +83,6 @@ class hotel:
 
 app = hotel()
 app.iniciar()
-
 
 
 
