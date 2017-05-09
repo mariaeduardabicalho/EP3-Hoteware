@@ -16,28 +16,54 @@ class MeuAplicativo:
         self.window.rowconfigure(1, weight=1)
         self.window.columnconfigure(0, minsize=120, weight=1)
         self.window.columnconfigure(1, weight=1)
+        
+        self.conteudo_label_inf = tk.StringVar()
+        label = tk.Label(self.window)
+        label.configure(textvariable=self.conteudo_label_inf)
+        label.configure(font="Courier 20 bold")
+        label.grid(row=0, column=0, columnspan=2, sticky="nsew") 
+        
+        self.conteudo_inf= tk.StringVar()
+        
+        self.bo=tk.Button(self.window)
+        self.bo.grid()
+        self.bo.configure(text='infos')
+        self.bo.configure(command=self.informacoes)
+        
+        #caixa_texto.configure(textvariable=self.conteudo_inf)
+        #caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
+        
+        # Binding: se apertar Enter dentro da caixa de texto, chama o callback
+        # self.apertou_enter. 
+        #caixa_texto.bind("<Return>", self.apertou)
+
+        
         self.botao=tk.Button(self.window)
         self.botao.configure(text='Servico de quarto')
         #self.botao.configure(command=self.servicodequarto)
         self.botao.grid()
+        
         self.bo=tk.Button(self.window)
         self.bo.grid()
         self.bo.configure(text='infos')
-        self.botao.configure(command=self.informacoes)
+        self.bo.configure(command=self.informacoes)
         self.window.mainloop()
 
         
     def iniciar(self):
         self.window.mainloop()
+
     
-    #def apertou_enter(self, bo, botao):
-       # self.bo()
+    def apertou(self, event):
+       self.postar()
 
     def informacoes(self):
-        print('Horário de abertura e encerramento do café: 7:30-11:00 \n Horário de almoco:12:00-15:00 \n Fechamento da piscina:17:00')
+        #print('Horário de abertura e encerramento do café: 7:30-11:00 \n Horário de almoco:12:00-15:00 \n Fechamento da piscina:17:00')
+        #self.conteudo_label_inf.set('Horário de abertura e encerramento do café: 7:30-11:00 \n Horário de almoco:12:00-15:00 \n Fechamento da piscina:17:00')
+
     
     def postar(self):
-        self.conteudo_label.set(self.conteudo_caixa_texto.get())
+        self.conteudo_label_inf.set(self.conteudo_inf.get())
 
 app = MeuAplicativo()
 app.iniciar()
