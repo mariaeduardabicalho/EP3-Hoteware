@@ -20,5 +20,14 @@ PERGUNTAR :
 *Colocar a imágem dos quartos? piglet
 ---mínimo produto viável
 
-Passo a passo:
-1-mapa e notificacao
+Coisas para fazer:
+Estudar tkinter
+-fazer o menu de informacao com o canvas
+-fazer o menu de comida com o canvas e um botao para escrever os pedidos
+-fazer o menu da barra de problema e um botao pra reportar o problema
+
+-fazer a interface do fucionario
+-definir as cordenadas dos botoes dos quartos
+-fazer cada quarto levar a uma janela que tem escrito os pedidos feitos (FODA)
+
+-mandar tudo pro firebase
