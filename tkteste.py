@@ -1,9 +1,15 @@
 import tkinter as tk
+import json
+
+with open('listahospede.json') as arquivo:
+ 	pedidos = json.load(arquivo)
 
 
 class hotel:
 	
-	def __init__(self):
+	def __init__(self,p):
+		self.p=p
+
 
 		# Janela principal.
 		self.window = tk.Tk()
@@ -51,59 +57,27 @@ class hotel:
 
 		self.menubar = tk.Menu(self.tela_user)
 		self.menubar.add_command(label="Inform", command=self.inform)
-		self.menubar.add_command(label="Quit", command=self.tela_user.quit)
+		self.menubar.add_command(label="Servico de quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar)
+
 		"""
 		self.bhi=tk.Button(self.tela_user)
 		self.bhi.grid()
 		self.bhi.configure(text='informações')
 		self.bhi.configure(command=self.)
 		"""
-
-
-	def inform(self):
-		
-
-
-	#def infos(self):
-		#self.tela_infos=tk.Toplevel()
-		#self.tela_infos.geometry("800x400+0+0")
-		#self.tela_user.title('informações')
-
-	   
-	
-	def wfunci(self):
-		self.tela_user= tk.Toplevel()
-		self.tela_user.geometry("800x400+0+0")
-		self.tela_user.title("Tela funcionario")
-
-
-	#def postar(self):
-		#self.conteudo_label_inf.set(self.conteudo_inf.get())
-
-app = hotel()
-app.iniciar()
-
-
-
-
-"""
-		# Label para mostrar mensagem e StringVar para se comunicar com ela.
-		# O StringVar é como o "walkie-talkie" do componente, posso usá-lo
-		# para mandar conteúdo e para receber conteúdo do componente. Coisa de
-		# Tkinter isso: cada framework faz de um jeito diferente.
-		# Note que eu guardo apenas o StringVar no self, pois é tudo o que eu
-		# preciso.
+	def servicodequarto(self):
 		self.conteudo_label = tk.StringVar()
-		label = tk.Label(self.window)
+		label = tk.Label(self.tela_user)
 		label.configure(textvariable=self.conteudo_label)
 		label.configure(font="Courier 20 bold")
 		label.grid(row=0, column=0, columnspan=2, sticky="nsew")        
 		
 		# Caixa de texto e StringVar para se comunicar com ela.
+
 		self.conteudo_caixa_texto = tk.StringVar()
 		
-		caixa_texto = tk.Entry(self.window)
+		caixa_texto = tk.Entry(self.tela_user)
 		caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
 		caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
 		
@@ -111,10 +85,61 @@ app.iniciar()
 		# self.apertou_enter. 
 		caixa_texto.bind("<Return>", self.apertou_enter)
 
-		# Botão de postar mensagem.        
-		botão = tk.Button(self.window)
+		        
+		botão = tk.Button(self.tela_user)
 		botão.configure(text="Postar")
 		botão.configure(command=self.postar)
 		botão.grid(row=1, column=1)
-"""
 		
+#	def iniciar(self):
+#		self.tela_user.mainloop()
+	
+	def apertou_enter(self, event):
+		self.postar()
+
+	
+	def postar(self):
+		self.conteudo_label.set(self.conteudo_caixa_texto.get())
+		self.pedidos[0]=conteudo_caixa_texto
+
+	def inform(self):
+
+		Lb1 = tk.Listbox(self.tela_user)
+		Lb1.insert(1, "Almoco: 12:00-15:00")
+		Lb1.insert(2, "Perl")
+		Lb1.insert(3, "C")
+		Lb1.insert(4, "PHP")
+		Lb1.insert(5, "JSP")
+		Lb1.insert(6, "Ruby")
+
+		Lb1.pack()
+
+	"""	listbox = tk.Listbox(self.tela_user)
+		listbox.pack()
+		A=[]
+
+		for i in range(1,len(self.lista)+1):
+			A.append(i)
+			listbox.insert(A[i], self.lista[i])
+	"""	
+	   
+	
+	def wfunci(self):
+		self.tela_user= tk.Toplevel()
+		self.tela_user.geometry("800x400+0+0")
+		self.tela_user.title("Tela funcionario")
+		self.botao=tk.Button(self.tela_user)
+		self.botao.configure(text='Quarto 1',background='green')
+		self.botao.configure(command=self.quarto)
+		self.botao.grid()
+
+
+	def quarto(self):
+		print(self.pedidos)
+
+app = hotel(pedidos)
+app.iniciar()
+
+
+with open('listahospede.json', 'w') as arquivo:
+	json.dump(pedidos,arquivo)
