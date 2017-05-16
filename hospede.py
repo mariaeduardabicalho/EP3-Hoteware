@@ -1,15 +1,12 @@
 import tkinter as tk
-import json
 from firebase import firebase
-"""with open('listahospede.json') as arquivo:
-	pedidos = json.load(arquivo)
-"""
+f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
+
 
 class hotel:
 	
-	def __init__(self,p):
-		self.p=p
-
+	def __init__(self):
+		
 		# Janela principal.
 		self.window = tk.Tk()
 		self.window.title("Hotware")
@@ -27,19 +24,6 @@ class hotel:
 		self.bo.configure(text='hospede')
 		self.bo.configure(command=self.whospede)
 
-		
-		#caixa_texto.configure(textvariable=self.conteudo_inf)
-		#caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
-		
-		# Binding: se apertar Enter dentro da caixa de texto, chama o callback
-		# self.apertou_enter. 
-		#caixa_texto.bind("<Return>", self.apertou)
-
-		
-		self.botao=tk.Button(self.window)
-		self.botao.configure(text='Funcionario')
-		self.botao.configure(command=self.wfunci)
-		self.botao.grid()
 		
 		
 	def iniciar(self):
@@ -59,19 +43,13 @@ class hotel:
 		self.menubar.add_command(label="Servico de quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
 
-		"""
-		self.bhi=tk.Button(self.tela_user)
-		self.bhi.grid()
-		self.bhi.configure(text='informações')
-		self.bhi.configure(command=self.)
-		"""
 	def servicodequarto(self):
 		self.conteudo_label = tk.StringVar()
 		label = tk.Label(self.tela_user)
 		label.configure(textvariable=self.conteudo_label)
 		label.configure(font="Courier 20 bold")
 		label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
-		# Caixa de texto e StringVar para se comunicar com ela.     
+   
 		
 
 		self.conteudo_caixa_texto = tk.StringVar()
@@ -79,9 +57,7 @@ class hotel:
 		caixa_texto = tk.Entry(self.tela_user)
 		caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
 		caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
-		
-		# Binding: se apertar Enter dentro da caixa de texto, chama o callback
-		# self.apertou_enter. 
+
 		caixa_texto.bind("<Return>", self.apertou_enter)
 
 		        
@@ -89,10 +65,7 @@ class hotel:
 		botão.configure(text="Postar")
 		botão.configure(command=self.postar)
 		botão.grid(row=1, column=1)
-		
-#	def iniciar(self):
-#		self.tela_user.mainloop()
-	
+
 	def apertou_enter(self, event):
 		self.postar()
 
@@ -100,17 +73,10 @@ class hotel:
 	def postar(self):
 		self.conteudo_label.set(self.conteudo_caixa_texto.get())
 
+		f.get('/users',None)
+		teste = 'Quarto1'
+		f.put('/users',teste,str(self.conteudo_label.get()))
 
-		f= firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
-		#result = firebase.get('/users', None)
-		f.post('/users',self.conteudo_label)
-
-
-		"""self.L=[self.p["Quarto1"]]
-								self.L.append(str(self.conteudo_label)) #como salvar o escrito no json?
-								self.p["Quarto1"]=L
-								with open('listahospede.json', 'w') as arquivo:
-									json.dump(self.p,arquivo)"""
 
 	def inform(self):
 
@@ -124,30 +90,7 @@ class hotel:
 
 		Lb1.pack()
 
-	"""	listbox = tk.Listbox(self.tela_user)
-		listbox.pack()
-		A=[]
-
-		for i in range(1,len(self.lista)+1):
-			A.append(i)
-			listbox.insert(A[i], self.lista[i])
-	"""
-
-	def wfunci(self):
-		self.tela_user= tk.Toplevel()
-		self.tela_user.geometry("800x400+0+0")
-		self.tela_user.title("Tela funcionario")
-		self.botao=tk.Button(self.tela_user)
-		self.botao.configure(text='Quarto 1',background='green')
-		self.botao.configure(command=self.quarto) #Como colocar o pedidos aqui?
-		self.botao.grid()
-
-
-	def quarto(self,p):
-		Lb2 = tk.Listbox(self.tela_user)
-		Lb2.insert(1, self.p)
-		
-app = hotel(pedidos)
+app = hotel()
 app.iniciar()
 
 
