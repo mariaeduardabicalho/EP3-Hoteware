@@ -81,9 +81,9 @@ class hotel:
 	def inform(self):
 
 		Lb1 = tk.Listbox(self.tela_user)
-		Lb1.insert(1, "Almoco: 12:00-15:00")
-		Lb1.insert(2, "Jantar: 18:00-22:00")
-		Lb1.insert(3, "Piscina: 11:00-18:00")
+		Lb1.insert(1, "Almoco: 12:00h as 15:00h")
+		Lb1.insert(2, "Jantar: 18:00h as 22:00h")
+		Lb1.insert(3, "Piscina: 11:00h as 18:00h")
 		#Lb1.insert(4, "PHP")
 		#Lb1.insert(5, "JSP")
 		#Lb1.insert(6, "Ruby")
