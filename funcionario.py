@@ -20,6 +20,7 @@ class hotel:
 		self.botao.configure(text='Funcionario')
 		self.botao.configure(command=self.wfunci)
 		self.botao.grid()
+		
 
 	def iniciar(self):
 		self.window.mainloop()
@@ -42,15 +43,16 @@ class hotel:
 		self.tela_user.columnconfigure(1, weight=1)
 		self.botao.grid()
 		self.update_clock()
+		
 
 
-		def update_clock(self): 
-			now = time.strftime("%H:%M:%S")
-			self.window.after(1000, self.update_clock)		
-			if (f.get('/users',None)['Quarto1'])==0:
-				self.botao.configure(background='green')
-			else:
-				self.botao.configure(background='blue')
+	def update_clock(self): 
+		now = time.strftime("%H:%M:%S")
+		self.window.after(1000, self.update_clock)		
+		if (f.get('/users',None)['Quarto1'])=="0":
+			self.botao.configure(background='green')
+		else:
+			self.botao.configure(background='blue')
 
 
 	def quarto(self):
@@ -61,12 +63,10 @@ class hotel:
 		self.botao2.configure(command=self.apagarinfo)
 
 	def apagarinfo(self):
-		f.put('/users','Quarto1',0)
+		f.put('/users','Quarto1','0')
 		
 
 		
 		
 app = hotel()
 app.iniciar()
-
-#loop infinito com tempo wait pra atualizar notificacaoes do fnc pra checar o firebase

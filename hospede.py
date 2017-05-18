@@ -40,8 +40,10 @@ class hotel:
 
 		self.menubar = tk.Menu(self.tela_user)
 		self.menubar.add_command(label="Inform", command=self.inform)
-		self.menubar.add_command(label="Servico de quarto", command=self.servicodequarto)
+		self.menubar.add_command(label="Reportar Problemas", command=self.reportarproblemas)
+		self.menubar.add_command(label="Servico de Quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
+
 
 	def servicodequarto(self):
 		self.conteudo_label = tk.StringVar()
@@ -49,8 +51,28 @@ class hotel:
 		label.configure(textvariable=self.conteudo_label)
 		label.configure(font="Courier 20 bold")
 		label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
-   
+
+		self.conteudo_caixa_texto = tk.StringVar()
 		
+		caixa_texto = tk.Entry(self.tela_user)
+		caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
+		caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
+
+		caixa_texto.bind("<Return>", self.apertou_enter)
+
+		        
+		botão = tk.Button(self.tela_user)
+		botão.configure(text="Postar")
+		botão.configure(command=self.postar)
+		botão.grid(row=2, column=1)
+
+
+	def reportarproblemas(self):
+		self.conteudo_label = tk.StringVar()
+		label = tk.Label(self.tela_user)
+		label.configure(textvariable=self.conteudo_label)
+		label.configure(font="Courier 20 bold")
+		label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
 
 		self.conteudo_caixa_texto = tk.StringVar()
 		
