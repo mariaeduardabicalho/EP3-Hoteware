@@ -44,27 +44,64 @@ class hotel:
 		self.menubar.add_command(label="Servico de Quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
 
+	v=[]
+	k=[]
 
+	def listona(d,l1,l2):
+		l1.append(i)
+		l2.append(d[i])
+		return k, sum(v)
+	
 	def servicodequarto(self):
-		self.conteudo_label = tk.StringVar()
-		label = tk.Label(self.tela_user)
-		label.configure(textvariable=self.conteudo_label)
-		label.configure(font="Courier 20 bold")
-		label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
+		d={'Porção de batata': 10, 'Salame aperitivo': 5}
 
-		self.conteudo_caixa_texto = tk.StringVar()
 		
-		caixa_texto = tk.Entry(self.tela_user)
-		caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
-		caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
 
-		caixa_texto.bind("<Return>", self.apertou_enter)
 
-		        
-		botão = tk.Button(self.tela_user)
-		botão.configure(text="Postar")
-		botão.configure(command=self.postar)
-		botão.grid(row=2, column=1)
+		for i in d:
+			def listona(d,l1,l2):
+				l1.append(i)
+				l2.append(d[i])
+				return k, sum(v)
+
+			botaod[i]=tk.Button(self.tela_user)	
+			i.configure(text=str(i))
+			i.grid(row=1, column=0)
+			i.configure(command=listona)
+
+			
+
+		l, v=listona(d)
+		#l=listona[:,0]
+		#v=listona[:,1]
+
+		f.get('/servico',None)
+		teste = 'Quarto1'
+		f.put('/servico',teste,l)
+				#f.put('/servico',teste,self.v)
+
+
+		"""self.conteudo_label = tk.StringVar()
+				label = tk.Label(self.tela_user)
+				label.configure(textvariable=self.conteudo_label)
+				label.configure(font="Courier 20 bold")
+				label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
+		
+				self.conteudo_caixa_texto = tk.StringVar()
+				
+				caixa_texto = tk.Entry(self.tela_user)
+				caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
+				caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
+		
+				caixa_texto.bind("<Return>", self.apertou_enter)
+		
+				        
+				botão = tk.Button(self.tela_user)
+				botão.configure(text="Postar")
+				botão.configure(command=self.postarserv)
+				botão.grid(row=2, column=1)
+		"""
+
 
 
 	def reportarproblemas(self):
@@ -85,19 +122,26 @@ class hotel:
 		        
 		botão = tk.Button(self.tela_user)
 		botão.configure(text="Postar")
-		botão.configure(command=self.postar)
+		botão.configure(command=self.postarprob)
 		botão.grid(row=1, column=1)
 
 	def apertou_enter(self, event):
 		self.postar()
 
 	
-	def postar(self):
+	def postarprob(self):
 		self.conteudo_label.set(self.conteudo_caixa_texto.get())
 
 		f.get('/users',None)
 		teste = 'Quarto1'
 		f.put('/users',teste,str(self.conteudo_label.get()))
+
+	def postarserv(self):
+		self.conteudo_label.set(self.conteudo_caixa_texto.get())
+
+		f.get('/servico',None)
+		teste = 'Quarto1'
+		f.put('/servico',teste,str(self.conteudo_label.get()))
 
 
 	def inform(self):
