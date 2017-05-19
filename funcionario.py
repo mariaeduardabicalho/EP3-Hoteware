@@ -48,22 +48,28 @@ class hotel:
 
 	def update_clock(self): 
 		now = time.strftime("%H:%M:%S")
-		self.window.after(1000, self.update_clock)		
-		if (f.get('/users',None)['Quarto1'])=="0":
+		self.window.after(10000, self.update_clock)		
+		if (f.get('/users',None)['Quarto1'])=="0" or  (f.get('/servico',None)['Quarto1'])=="0":
 			self.botao.configure(background='green')
 		else:
 			self.botao.configure(background='blue')
 
 
 	def quarto(self):
-		self.botao2=tk.Button(self.tela_user)
-		
+		self.botao2=tk.Button(self.tela_user)		
 		self.botao2.configure(text=f.get('/users',None)['Quarto1'])
-		self.botao2.grid(row=1, column=0)
+		self.botao2.grid(row=, column=0)
 		self.botao2.configure(command=self.apagarinfo)
+
+
+		self.botao3=tk.Button(self.tela_user)		
+		self.botao3.configure(text=f.get('/servico',None)['Quarto1'])
+		self.botao3.grid(row=1, column=0)
+		self.botao3.configure(command=self.apagarinfo)
 
 	def apagarinfo(self):
 		f.put('/users','Quarto1','0')
+		f.put('/servico','Quarto1','0')
 		
 
 		
