@@ -2,7 +2,7 @@ import tkinter as tk
 from firebase import firebase
 f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
 
-
+from tkinter import Tk, StringVar, ttk
 class hotel:
 	
 	def __init__(self):
@@ -24,6 +24,7 @@ class hotel:
 		self.bo.configure(text='hospede')
 		self.bo.configure(command=self.whospede)
 
+
 		
 		
 	def iniciar(self):
@@ -44,20 +45,26 @@ class hotel:
 		self.menubar.add_command(label="Servico de Quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
 
-	v=[]
-	k=[]
-
-	def listona(d,l1,l2):
-		l1.append(i)
-		l2.append(d[i])
-		return k, sum(v)
+#	v=[]
+#	k=[]
+#
+#	def listona(d,l1,l2):
+#		l1.append(i)
+#		l2.append(d[i])
+#		return k, sum(v)
 	
 	def servicodequarto(self):
-		d={'Porção de batata': 10, 'Salame aperitivo': 5}
-
-		
 
 
+		countryvar = tk.StringVar()
+		country = ttk.Combobox(self.tela_user, textvariable=countryvar)
+		country.bind('<<ComboboxSelected>>', carrinho)
+		country['values'] = ('USA', 'Canada', 'Australia')
+
+	def carrinho(self):
+		print("")
+
+		"""d={'Porção de batata': 10, 'Salame aperitivo': 5}
 		for i in d:
 			def listona(d,l1,l2):
 				l1.append(i)
@@ -69,8 +76,6 @@ class hotel:
 			i.grid(row=1, column=0)
 			i.configure(command=listona)
 
-			
-
 		l, v=listona(d)
 		#l=listona[:,0]
 		#v=listona[:,1]
@@ -81,7 +86,7 @@ class hotel:
 				#f.put('/servico',teste,self.v)
 
 
-		"""self.conteudo_label = tk.StringVar()
+		self.conteudo_label = tk.StringVar()
 				label = tk.Label(self.tela_user)
 				label.configure(textvariable=self.conteudo_label)
 				label.configure(font="Courier 20 bold")
@@ -160,3 +165,24 @@ app = hotel()
 app.iniciar()
 
 
+
+"""
+class combozin:
+
+    def __init__(self, parent):
+        self.parent = parent
+        self.combo()
+
+    def combo(self):
+        self.box_value = StringVar()
+        self.box = ttk.Combobox(self.parent, textvariable=self.box_value, 
+                                state='readonly')
+        self.box['values'] = ('A', 'B', 'C')
+        self.box.current(0)
+        self.box.grid(column=0, row=0)
+
+if __name__ == '__main__':
+    root = Tk()
+    app = Application(root)
+    root.mainloop()
+    """
