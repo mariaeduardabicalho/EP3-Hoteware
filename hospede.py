@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from firebase import firebase
 f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
 
@@ -16,16 +17,17 @@ class hotel:
 		self.window.columnconfigure(0, minsize=120, weight=1)
 		self.window.columnconfigure(1, weight=1)
 		
-		
-		#self.conteudo_inf= tk.StringVar()
+
 		
 		self.bo=tk.Button(self.window)
 		self.bo.grid()
 		self.bo.configure(text='hospede')
 		self.bo.configure(command=self.whospede)
-
-
-		
+		self.A=[]
+		self.B=[]
+		self.entradas={'salame-R$2,00':2, 'batata-R$5,00':5}
+		self.pratop={'Penne a Bolognesa-R$35,00':35,'Filet ao molho de mostarda-R$40,00':40}
+	
 		
 	def iniciar(self):
 		self.window.mainloop()
@@ -45,69 +47,46 @@ class hotel:
 		self.menubar.add_command(label="Servico de Quarto", command=self.servicodequarto)
 		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
 
-#	v=[]
-#	k=[]
-#
-#	def listona(d,l1,l2):
-#		l1.append(i)
-#		l2.append(d[i])
-#		return k, sum(v)
-	
+
+
 	def servicodequarto(self):
+			
+		self.texto= tk.StringVar()
+		self.texto2=tk.StringVar()
+		self.texto.set('Pedido: ')
+		self.texto2.set('Total: ')
+		self.combo=ttk.Combobox(self.tela_user)
+		self.combo2=ttk.Combobox(self.tela_user)
+		self.combo.place(x=50,y=100,width=160)
+		self.combo2.place(x=230,y=100,width=200)
+		self.combo['values']=('Escolha uma entrada','salame-R$2,00','batata-R$5,00')
+		self.combo2['values']=('Escolha um prato principal','Penne a Bolognesa-R$35,00','Filet ao molho de mostarda-R$40,00')
+		self.combo.current(0)
+		self.combo2.current(0)
+		botao=tk.Button(self.tela_user,command=self.pegar, text='Adicionar ao pedido').place(x=80,y=150)
+		botao2=tk.Button(self.tela_user,command=self.finalizar, text='Finalizar pedido').place(x=80,y=180)
+		etiqueta= tk.Label(self.tela_user,textvariable=self.texto).place(x=40,y=210)
+		etiqueta2= tk.Label(self.tela_user,textvariable=self.texto2).place(x=40,y=240)
 
 
-		countryvar = tk.StringVar()
-		country = ttk.Combobox(self.tela_user, textvariable=countryvar)
-		country.bind('<<ComboboxSelected>>', carrinho)
-		country['values'] = ('USA', 'Canada', 'Australia')
+	def pegar(self):
+		if self.combo2.get()!='Escolha um prato principal':
+			self.A.append(self.combo2.get())
+			self.B.append(self.pratop[self.combo2.get()])
+		if self.combo.get()!='Escolha uma entrada':
+			self.A.append(self.combo.get())
+			self.B.append(self.entradas[self.combo.get()])
+		self.texto.set(self.A)
 
-	def carrinho(self):
-		print("")
+		
 
-		"""d={'Porção de batata': 10, 'Salame aperitivo': 5}
-		for i in d:
-			def listona(d,l1,l2):
-				l1.append(i)
-				l2.append(d[i])
-				return k, sum(v)
-
-			botaod[i]=tk.Button(self.tela_user)	
-			i.configure(text=str(i))
-			i.grid(row=1, column=0)
-			i.configure(command=listona)
-
-		l, v=listona(d)
-		#l=listona[:,0]
-		#v=listona[:,1]
-
+	def finalizar(self):	
+		self.texto2.set('Total: R$'+ str(sum(self.B)) +',00')
 		f.get('/servico',None)
+		f.get('/total',None)
 		teste = 'Quarto1'
-		f.put('/servico',teste,l)
-				#f.put('/servico',teste,self.v)
-
-
-		self.conteudo_label = tk.StringVar()
-				label = tk.Label(self.tela_user)
-				label.configure(textvariable=self.conteudo_label)
-				label.configure(font="Courier 20 bold")
-				label.grid(row=0, column=0, columnspan=2, sticky="nsew")   
-		
-				self.conteudo_caixa_texto = tk.StringVar()
-				
-				caixa_texto = tk.Entry(self.tela_user)
-				caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
-				caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
-		
-				caixa_texto.bind("<Return>", self.apertou_enter)
-		
-				        
-				botão = tk.Button(self.tela_user)
-				botão.configure(text="Postar")
-				botão.configure(command=self.postarserv)
-				botão.grid(row=2, column=1)
-		"""
-
-
+		f.put('/servico',teste,self.A)
+		f.put('/total',teste,sum(self.B))
 
 	def reportarproblemas(self):
 		self.conteudo_label = tk.StringVar()
@@ -141,13 +120,6 @@ class hotel:
 		teste = 'Quarto1'
 		f.put('/users',teste,str(self.conteudo_label.get()))
 
-	def postarserv(self):
-		self.conteudo_label.set(self.conteudo_caixa_texto.get())
-
-		f.get('/servico',None)
-		teste = 'Quarto1'
-		f.put('/servico',teste,str(self.conteudo_label.get()))
-
 
 	def inform(self):
 
@@ -155,34 +127,7 @@ class hotel:
 		Lb1.insert(1, "Almoco: 12:00h as 15:00h")
 		Lb1.insert(2, "Jantar: 18:00h as 22:00h")
 		Lb1.insert(3, "Piscina: 11:00h as 18:00h")
-		#Lb1.insert(4, "PHP")
-		#Lb1.insert(5, "JSP")
-		#Lb1.insert(6, "Ruby")
-
 		Lb1.pack()
 
 app = hotel()
 app.iniciar()
-
-
-
-"""
-class combozin:
-
-    def __init__(self, parent):
-        self.parent = parent
-        self.combo()
-
-    def combo(self):
-        self.box_value = StringVar()
-        self.box = ttk.Combobox(self.parent, textvariable=self.box_value, 
-                                state='readonly')
-        self.box['values'] = ('A', 'B', 'C')
-        self.box.current(0)
-        self.box.grid(column=0, row=0)
-
-if __name__ == '__main__':
-    root = Tk()
-    app = Application(root)
-    root.mainloop()
-    """
