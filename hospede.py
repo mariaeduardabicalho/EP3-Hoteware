@@ -11,7 +11,7 @@ class hotel:
 		# Janela principal.
 		self.window = tk.Tk()
 		self.window.title("Hotware")
-		self.window.geometry("300x200+100+100")
+		self.window.geometry("500x500")
 		self.window.rowconfigure(0, minsize=150, weight=1)
 		self.window.rowconfigure(1, weight=1)
 		self.window.columnconfigure(0, minsize=120, weight=1)
@@ -38,7 +38,7 @@ class hotel:
 
 	def whospede(self):
 		self.tela_user= tk.Toplevel()
-		self.tela_user.geometry("800x400+0+0")
+		self.tela_user.geometry("500x500")
 		self.tela_user.title("Tela hospede")
 
 		self.menubar = tk.Menu(self.tela_user)
