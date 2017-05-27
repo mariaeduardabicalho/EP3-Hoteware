@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from firebase import firebase
+import time
 f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
 
 from tkinter import Tk, StringVar, ttk
@@ -19,7 +20,7 @@ class hotel:
 
 		self.texto= tk.StringVar()
 		self.combo=ttk.Combobox(self.window)
-		self.combo.place(x=10,y=100,width=160)
+		self.combo.place(x=10,y=100,width=200)
 		self.combo['values']=('Qual o numero do seu quarto?','1','2','3','4')
 		self.combo.current(0)
 		botao=tk.Button(self.window,command=self.ok, text='ok').place(x=80,y=150)
@@ -108,7 +109,7 @@ class hotel:
 		if self.combo4.get()!='Escolha uma bebida':
 			self.A.append(self.combo4.get())
 			self.B.append(self.bebida[self.combo4.get()])
-		self.texto.set('Pedidos: '+ str(self.A))
+		self.texto.set('Pedidos: ' + str(self.A))
 		
 
 	def finalizar(self):	
@@ -118,6 +119,9 @@ class hotel:
 		teste = self.q
 		f.put('/servico',teste,self.A)
 		f.put('/total',teste,sum(self.B))
+		self.texto3= tk.StringVar()
+		self.texto3.set('Seu pedido foi feito. Estamos a caminho.')
+		feedback= tk.Label(self.tela_user,textvariable=self.texto3).place(x=100,y=300)
 
 	def reportarproblemas(self):
 		self.conteudo_label = tk.StringVar()
@@ -151,13 +155,42 @@ class hotel:
 		teste = self.q
 		f.put('/users',teste,str(self.conteudo_label.get()))
 
+		self.texto4= tk.StringVar()
+		self.texto4.set('Estamos a caminho.')
+		feedback4= tk.Label(self.tela_user,textvariable=self.texto4).place(x=100,y=250)
+
 
 	def inform(self):
 
-		Lb1 = tk.Listbox(self.tela_user)
-		Lb1.insert(1, "Almoco: 12:00h as 15:00h")
-		Lb1.insert(2, "Jantar: 18:00h as 22:00h")
-		Lb1.insert(3, "Piscina: 11:00h as 18:00h")
+		Lb1 = tk.Listbox(self.tela_user,width=200)
+		now = time.strftime("%H:%M:%S")
+		print(now)
+
+		Lb1.insert(0, "Café da manhã:  07:00h as 10:30h")
+		Lb1.insert(1, "Almoco:  12:00h as 15:00h")
+		Lb1.insert(2, "Jantar:  18:00h as 22:00h")
+		Lb1.insert(3, "Piscina: 08:00h as 22:00h")
+
+		#mudança de cor da listbox de acordo com horario de funcionamento
+		if now >= time.strftime("07:00:00") and (now<time.strftime("10:30:00")) :
+			Lb1.itemconfig(0, bg='green')
+		else:
+			Lb1.itemconfig(0, bg='red')
+
+		if now >= time.strftime("12:00:00") and (now<time.strftime("15:00:00")) :
+			Lb1.itemconfig(1, bg='green')
+		else:
+			Lb1.itemconfig(1, bg='red')
+
+		if now >= time.strftime("18:00:00") and (now<time.strftime("22:00:00")) :
+			Lb1.itemconfig(2, bg='green')
+		else:
+			Lb1.itemconfig(2, bg='red')
+		if now >= time.strftime("07:00:00") and (now<time.strftime("22:00:00")) :
+			Lb1.itemconfig(3, bg='green')
+		else:
+			Lb1.itemconfig(3, bg='red')
+		
 		Lb1.pack()
 
 app = hotel()

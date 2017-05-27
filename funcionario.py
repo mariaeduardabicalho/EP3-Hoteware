@@ -63,7 +63,7 @@ class hotel:
 
 	def update_clock(self): 
 		now = time.strftime("%H:%M:%S")
-		self.window.after(10000, self.update_clock)		
+		self.window.after(1000, self.update_clock)		
 		if (f.get('/users',None)['Quarto1'])=="0" and (f.get('/servico',None)['Quarto1'])=="0" and (f.get('/total',None)['Quarto1'])=="0":
 			self.botao.configure(background='green')
 		else:
@@ -90,16 +90,17 @@ class hotel:
 				f.put('/users',q,'0')
 
 		if f.get('/servico',None)[q] != '0':
-			for x in f.get('/servico',None)[q]:
+			for i in range(len(f.get('/servico',None)[q])):
+				x=f.get('/servico',None)[q][i]
 				self.mvar=tk.IntVar()
-				self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar,command=self.apagarinfos).grid(row=2,column=c)
+				self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar,command=self.apagarinfos).grid(row=4+i,column=c)
 				if self.check==1:
 					f.put('/servico',q,x,'0')
 
 
 		self.mvar=tk.IntVar()
 		if f.get('/total',None)[q] != '0':
-			self.check3=tk.Checkbutton(self.tela_user,text='Total: R$' + str(f.get('/total',None)[q])+ ',00',variable=self.mvar,command=self.apagarinfot).grid(row=2,column=c)
+			self.check3=tk.Checkbutton(self.tela_user,text='Total: R$' + str(f.get('/total',None)[q])+ ',00',variable=self.mvar,command=self.apagarinfot).grid(row=3,column=c)
 			if self.check3==1:
 				f.put('/total',q,'0')
 	
