@@ -16,9 +16,15 @@ class hotel:
 		self.window.rowconfigure(1, weight=1)
 		self.window.columnconfigure(0, minsize=120, weight=1)
 		self.window.columnconfigure(1, weight=1)
-		
 
-		
+		self.texto= tk.StringVar()
+		self.combo=ttk.Combobox(self.window)
+		self.combo.place(x=10,y=100,width=160)
+		self.combo['values']=('Qual o numero do seu quarto?','1','2','3','4')
+		self.combo.current(0)
+		botao=tk.Button(self.window,command=self.ok, text='ok').place(x=80,y=150)
+
+
 		self.bo=tk.Button(self.window)
 		self.bo.grid()
 		self.bo.configure(text='hospede')
@@ -27,6 +33,18 @@ class hotel:
 		self.B=[]
 		self.entradas={'salame-R$2,00':2, 'batata-R$5,00':5}
 		self.pratop={'Penne a Bolognesa-R$35,00':35,'Filet ao molho de mostarda-R$40,00':40}
+		self.sobremesa={'Torta de Morango-R$15,00':15,'Petit Gateau-R$20,00':20}
+		self.bebida={'Refrigerante-R$5,00':5,'Agua-R$3,00':3,'Suco Natural-R$8,00':8}
+
+	def ok(self):
+		if self.combo.get()=='1':
+			self.q= 'Quarto1'
+		if self.combo.get()=='2':
+			self.q= 'Quarto2'
+		if self.combo.get()=='3':
+			self.q= 'Quarto3'
+		if self.combo.get()=='4':
+			self.q= 'Quarto4'
 	
 		
 	def iniciar(self):
@@ -38,7 +56,7 @@ class hotel:
 
 	def whospede(self):
 		self.tela_user= tk.Toplevel()
-		self.tela_user.geometry("500x500")
+		self.tela_user.geometry("800x800")
 		self.tela_user.title("Tela hospede")
 
 		self.menubar = tk.Menu(self.tela_user)
@@ -57,12 +75,20 @@ class hotel:
 		self.texto2.set('Total: ')
 		self.combo=ttk.Combobox(self.tela_user)
 		self.combo2=ttk.Combobox(self.tela_user)
-		self.combo.place(x=50,y=100,width=160)
-		self.combo2.place(x=230,y=100,width=200)
+		self.combo3=ttk.Combobox(self.tela_user)
+		self.combo4=ttk.Combobox(self.tela_user)
+		self.combo.place(x=10,y=100,width=160)
+		self.combo2.place(x=200,y=100,width=200)
+		self.combo3.place(x=430,y=100,width=160)
+		self.combo4.place(x=630,y=100,width=160)
 		self.combo['values']=('Escolha uma entrada','salame-R$2,00','batata-R$5,00')
 		self.combo2['values']=('Escolha um prato principal','Penne a Bolognesa-R$35,00','Filet ao molho de mostarda-R$40,00')
+		self.combo3['values']=('Escolha uma sobremesa','Torta de Morango-R$15,00','Petit Gateau-R$20,00')
+		self.combo4['values']=('Escolha uma bebida','Refrigerante-R$5,00','Agua-R$3,00','Suco Natural-R$8,00')
 		self.combo.current(0)
 		self.combo2.current(0)
+		self.combo3.current(0)
+		self.combo4.current(0)
 		botao=tk.Button(self.tela_user,command=self.pegar, text='Adicionar ao pedido').place(x=80,y=150)
 		botao2=tk.Button(self.tela_user,command=self.finalizar, text='Finalizar pedido').place(x=80,y=180)
 		etiqueta= tk.Label(self.tela_user,textvariable=self.texto).place(x=40,y=210)
@@ -76,15 +102,20 @@ class hotel:
 		if self.combo.get()!='Escolha uma entrada':
 			self.A.append(self.combo.get())
 			self.B.append(self.entradas[self.combo.get()])
-		self.texto.set(self.A)
-
+		if self.combo3.get()!='Escolha uma sobremesa':
+			self.A.append(self.combo3.get())
+			self.B.append(self.sobremesa[self.combo3.get()])
+		if self.combo4.get()!='Escolha uma bebida':
+			self.A.append(self.combo4.get())
+			self.B.append(self.bebida[self.combo4.get()])
+		self.texto.set('Pedidos: '+ str(self.A))
 		
 
 	def finalizar(self):	
 		self.texto2.set('Total: R$'+ str(sum(self.B)) +',00')
 		f.get('/servico',None)
 		f.get('/total',None)
-		teste = 'Quarto1'
+		teste = self.q
 		f.put('/servico',teste,self.A)
 		f.put('/total',teste,sum(self.B))
 
@@ -117,7 +148,7 @@ class hotel:
 		self.conteudo_label.set(self.conteudo_caixa_texto.get())
 
 		f.get('/users',None)
-		teste = 'Quarto1'
+		teste = self.q
 		f.put('/users',teste,str(self.conteudo_label.get()))
 
 
