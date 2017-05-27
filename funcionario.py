@@ -1,6 +1,5 @@
 import tkinter as tk
 import time
-
 from firebase import firebase
 f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
 
@@ -11,16 +10,16 @@ class hotel:
 		# Janela principal.
 		self.window = tk.Tk()
 		self.window.title("Hotware")
-		self.window.geometry("500x500")
+		self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth(),self.window.winfo_screenheight()))
 		self.window.rowconfigure(0, minsize=150, weight=1)
 		self.window.rowconfigure(1, weight=1)
 		self.window.columnconfigure(0, minsize=120, weight=1)
 		self.window.columnconfigure(1, weight=1)
+
 		self.botao=tk.Button(self.window)
 		self.botao.configure(text='Funcionario')
 		self.botao.configure(command=self.wfunci)
 		self.botao.grid()
-		self.mvar=tk.IntVar()
 
 	def iniciar(self):
 		self.window.mainloop()
@@ -31,76 +30,88 @@ class hotel:
 
 	def wfunci(self):
 		self.tela_user= tk.Toplevel()
-		self.tela_user.geometry("500x500")
+		self.tela_user.geometry("{0}x{1}+0+0".format(self.tela_user.winfo_screenwidth(),self.tela_user.winfo_screenheight()))
 		self.tela_user.title("Tela funcionario")
-		self.botao=tk.Button(self.tela_user)
-		self.botao.configure(text='Quarto 1',background='green')
-		self.botao.configure(command=self.quarto) #Como colocar o pedidos aqui?
-		self.tela_user.geometry("500x500")
-		self.tela_user.rowconfigure(0, minsize=150, weight=1)
-		self.tela_user.rowconfigure(1, weight=1)
 		self.tela_user.columnconfigure(0, minsize=120, weight=1)
 		self.tela_user.columnconfigure(1, weight=1)
-		self.botao.grid()
-		self.update_clock()
-		
+		self.tela_user.columnconfigure(2, weight=1)
+		self.tela_user.columnconfigure(3, weight=1)
 
+		self.botao=tk.Button(self.tela_user)
+		self.botao.configure(text='Quarto 1',background='green')
+		self.botao.configure(command=lambda : self.quarto('Quarto1',0))
+
+		self.botao2=tk.Button(self.tela_user)
+		self.botao2.configure(text='Quarto 2',background='green')
+		self.botao2.configure(command=lambda : self.quarto('Quarto2',1))
+
+		self.botao3=tk.Button(self.tela_user)
+		self.botao3.configure(text='Quarto 3',background='green')
+		self.botao3.configure(command=lambda : self.quarto('Quarto3',2))
+
+		self.botao4=tk.Button(self.tela_user)
+		self.botao4.configure(text='Quarto 4',background='green')
+		self.botao4.configure(command=lambda : self.quarto('Quarto4',3))
+		#self.botao4.configure(command= lambda : self.x(" AAA "))
+
+		self.botao.grid(row=0,column=0)
+		self.botao2.grid(row=0,column=1)
+		self.botao3.grid(row=0,column=2)
+		self.botao4.grid(row=0,column=3)
+		
+		self.update_clock()
 
 	def update_clock(self): 
 		now = time.strftime("%H:%M:%S")
 		self.window.after(10000, self.update_clock)		
-		if (f.get('/users',None)['Quarto1'])=="0" or (f.get('/servico',None)['Quarto1'])=="0":
+		if (f.get('/users',None)['Quarto1'])=="0" and (f.get('/servico',None)['Quarto1'])=="0" and (f.get('/total',None)['Quarto1'])=="0":
 			self.botao.configure(background='green')
 		else:
 			self.botao.configure(background='blue')
+		if (f.get('/users',None)['Quarto2'])=="0" and (f.get('/servico',None)['Quarto2'])=="0" and (f.get('/total',None)['Quarto2'])=="0":
+			self.botao2.configure(background='green')
+		else:
+			self.botao2.configure(background='blue')
+		if (f.get('/users',None)['Quarto3'])=="0" and (f.get('/servico',None)['Quarto3'])=="0" and (f.get('/total',None)['Quarto3'])=="0":
+			self.botao3.configure(background='green')
+		else:
+			self.botao3.configure(background='blue')
+		if (f.get('/users',None)['Quarto4'])=="0" and (f.get('/servico',None)['Quarto4'])=="0" and (f.get('/total',None)['Quarto4'])=="0":
+			self.botao4.configure(background='green')
+		else:
+			self.botao4.configure(background='blue')
 
 
-	def quarto(self):
-		for x in f.get('/users',None)['Quarto1']:
-
-			self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar,offvalue=0,command=self.apagarinfou).grid()
+	def quarto(self,q,c):
+		if f.get('/users',None)[q] != '0':
+			self.check=tk.Checkbutton(self.tela_user,text=f.get('/users',None)[q],variable=self.mvar,offvalue=0,command=self.apagarinfou).grid(row=2,column=c)
 			self.mvar=tk.IntVar()
 			if self.check==1:
-				f.put('/users','Quarto1',x,'0')
+				f.put('/users',q,'0')
 
+		if f.get('/servico',None)[q] != '0':
+			for x in f.get('/servico',None)[q]:
+				self.mvar=tk.IntVar()
+				self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar,command=self.apagarinfos).grid(row=2,column=c)
+				if self.check==1:
+					f.put('/servico',q,x,'0')
 
-		for x in f.get('/servico',None)['Quarto1']:
-			self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar,command=self.apagarinfos).grid()
-			if self.check==1:
-				f.put('/servico','Quarto1',x,'0')
 
 		self.mvar=tk.IntVar()
-		self.check3=tk.Checkbutton(self.tela_user,text=f.get('/total',None)['Quarto1'],variable=self.mvar,command=self.apagarinfot).grid()
-		if self.check3==1:
-			f.put('/total','Quarto1',x,'0')
+		if f.get('/total',None)[q] != '0':
+			self.check3=tk.Checkbutton(self.tela_user,text='Total: R$' + str(f.get('/total',None)[q])+ ',00',variable=self.mvar,command=self.apagarinfot).grid(row=2,column=c)
+			if self.check3==1:
+				f.put('/total',q,'0')
 	
 
-
-
-		"""
-		self.botao2=tk.Button(self.tela_user)		
-		self.botao2.configure(text=f.get('/users',None)['Quarto1'])
-		self.botao2.grid(row=1, column=0)
-		self.botao2.configure(command=self.apagarinfo)
-
-
-		self.botao3=tk.Button(self.tela_user)		
-		self.botao3.configure(text=f.get('/servico',None)['Quarto1'])
-		self.botao3.grid(row=1, column=0)
-		self.botao3.configure(command=self.apagarinfo)
-
-		"""
-
 	def apagarinfou(self):
-		f.put('/users','Quarto1','0')
+		f.put('/users',q,'0')
 
 	def apagarinfos(self):
-		f.put('/servico','Quarto1','0')
+		f.put('/servico',q,'0')
 
 	def apagarinfot(self):
-		f.put('/total','Quarto1','0')
-		
-
+		f.put('/total',q,'0')
 		
 		
 app = hotel()
