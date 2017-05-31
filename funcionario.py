@@ -7,7 +7,8 @@ f = firebase.FirebaseApplication('https://ep3-hotware.firebaseio.com', None)
 class hotel:
 	
 	def __init__(self):
-		# Janela principal.
+		
+		# Definindo a janela principal
 		self.tela_user= tk.Tk()
 		self.tela_user.geometry("{0}x{1}+0+0".format(self.tela_user.winfo_screenwidth(),self.tela_user.winfo_screenheight()))
 		self.tela_user.title("Tela funcionario")
@@ -16,10 +17,13 @@ class hotel:
 		self.tela_user.columnconfigure(2, weight=1)
 		self.tela_user.columnconfigure(3, weight=1)
 
+		#Instruções para o funcionário
 		self.textoo= tk.StringVar()
 		self.textoo.set('Clique nos quartos azuis para ver notificações')
 		escrever= tk.Label(self.tela_user,textvariable=self.textoo,font=(None,15)).place(x=40,y=600)
 
+
+		#Criação dos botões para cada quarto
 		self.botao=tk.Button(self.tela_user)
 		self.botao.configure(text='Quarto 1',background='green')
 		self.botao.configure(command=lambda : self.quarto('Quarto1',0,0))
@@ -49,15 +53,14 @@ class hotel:
 	def iniciar(self):
 		self.tela_user.mainloop()
 
-	
-	def apertou(self, event):
-		self.postar()
 
 
 	def update_clock(self): 
 		g=f.get('/', None)
 		now = time.strftime("%H:%M:%S")
-		self.tela_user.after(1000, self.update_clock)		
+		self.tela_user.after(1000, self.update_clock)	#atualizar o firebase	
+
+		#modificar a cor se tiver alguma atualização do usuario
 		if (g['users']['Quarto1'])=="0" and (g['servico']['Quarto1'])=="0" and (g['total']['Quarto1'])=="0" and (g['spa']['Quarto1'])=="0" and (g['totalspa']['Quarto1'])=="0" and (g['horariospa']['Quarto1'])=="0":
 			self.botao.configure(background='green')
 		else:
@@ -78,15 +81,18 @@ class hotel:
 
 	def quarto(self,q,c,p):
 		g=f.get('/', None)
+
+		#saber a quantidade de informações de cada item para organizar os checkboxes na ordem
 		le=len(g['servico'][q])
 		le3=len(g['spa'][q])
-		if g['users'][q] != '0':
+
+		if g['users'][q] != '0': #se algum problema for reportado
 
 			self.textoprob= tk.StringVar()
-			self.textoprob.set('Problema reportado: ')
-			escrever= tk.Label(self.tela_user,textvariable=self.textoprob,font=(None,10)).place(x=100+p,y=30)
+			self.textoprob.set('Problema reportado: ') #escrever na tela problema
+			escrever= tk.Label(self.tela_user,textvariable=self.textoprob,font=(None,10)).place(x=100+p,y=30) 
 			self.check=tk.Checkbutton(self.tela_user,text=g['users'][q],variable=self.mvar,offvalue=0,command=lambda : self.apagarinfou(q)).place(x=110+p,y=60)
-			self.mvar=tk.IntVar()
+			self.mvar=tk.IntVar() #criar checkbutton do problema, mas se clicar colocar a informação no firebase como 0
 			if self.check==1:
 				f.put('/users',q,'0')
 
@@ -94,7 +100,7 @@ class hotel:
 			self.textoserv= tk.StringVar()
 			self.textoserv.set('Servico de quarto: ')
 			escrever= tk.Label(self.tela_user,textvariable=self.textoserv,font=(None,10)).place(x=100+p,y=80)
-			for i in range(len(g['servico'][q])):
+			for i in range(len(g['servico'][q])): #mesmo modelo que o anterior, mas pegar cada termo do pedido
 				x=g['servico'][q][i]
 				self.mvar3=tk.IntVar()
 				self.check=tk.Checkbutton(self.tela_user,text=x,variable=self.mvar3,command= lambda : self.apagarinfos(q)).place(x=110+p,y=90+(i*20+30))
@@ -134,8 +140,7 @@ class hotel:
 			if self.check3==1:
 				f.put('/totalspa',q,'0')
 
-
-
+	#Trasformar as informações do firebase em 0
 	def apagarinfou(self,q):
 		f.put('/users',q,'0')
 
