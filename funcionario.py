@@ -129,7 +129,8 @@ class hotel:
 
 		self.mvar=tk.IntVar()
 		if g['horariospa'][q]!= '0':
-			self.check3=tk.Checkbutton(self.tela_user,text='Horário no spa:' + str(g['horariospa'][q]),variable=self.mvar,command=lambda : self.apagarinfosh(q)).place(x=110+p,y=200+le*30)
+			self.HS="  ".join(g['horariospa'][q])
+			self.check3=tk.Checkbutton(self.tela_user,text='Horário no spa: ' + self.HS,variable=self.mvar,command=lambda : self.apagarinfosh(q)).place(x=110+p,y=200+le*30)
 			if self.check3==1:
 				f.put('/horariospa',q,'0')
 
