@@ -11,7 +11,7 @@ class hotel:
 	
 	def __init__(self):
 		
-		# Janela de selecao dos quartos
+		# Configuração da janela de selecao dos quartos
 		self.window = tk.Tk()
 		self.window.title("Hotware")
 		self.window.geometry("500x500")
@@ -33,11 +33,11 @@ class hotel:
 		botao=tk.Button(self.window,command=self.ok, text='  ok  ', bg='pink').place(x=300,y=100)
 
 		# Lista para armazenar os valores das comidas e as comidas 
-		self.A=[]
-		self.B=[]
-		self.S=[]
-		self.V=[]
-		self.H=[]
+		self.A=[] #itens do servico de quarto
+		self.B=[] #valores do serviço de quarto
+		self.S=[] #itens do spa
+		self.V=[] #valores dos itens do spa
+		self.H=[] #horario do spa
 
 		#Dicionario que armazena o valor de cada alimento
 		self.entradas={'salame-R$2,00':2, 'batata-R$5,00':5}
@@ -46,6 +46,8 @@ class hotel:
 		self.bebida={'Refrigerante-R$5,00':5,'Agua-R$3,00':3,'Suco Natural-R$8,00':8}
 		self.spa1={'Unha da mão-R$15,00':15,'Unha do pé-R$20,00':20,'Massagem-R$45,00 ':45}
 
+
+		#abir a tela com a variavel do quarto selecionado
 	def ok(self):
 		if self.combo.get()=='1':
 			self.q= 'Quarto1'
@@ -56,52 +58,55 @@ class hotel:
 		if self.combo.get()=='4':
 			self.q= 'Quarto4'
 
-
+		#Criação da janela
 		self.tela_user= tk.Toplevel()
 		self.tela_user.geometry("800x800")
 		self.tela_user.title("Tela hospede")
 
+		#Informações nos menus
 		self.menubar = tk.Menu(self.tela_user)
 		self.menubar.add_command(label="Informacoes", command=self.inform)
 		self.menubar.add_command(label="Reportar Problemas", command=self.reportarproblemas)
 		self.menubar.add_command(label="Servico de Quarto", command=self.servicodequarto)
 		self.menubar.add_command(label="Spa", command=self.spa)
-		self.tela_user.config(menu=self.menubar) # Como permutar entre menus?
+		self.tela_user.config(menu=self.menubar)
 
 	
 	def iniciar(self):
 		self.window.mainloop()
-
 	
 	def apertou(self, event):
 		self.postar(p)
 
-
+	#Função do menubar spa
 	def spa(self):
+
+		#Texto explicativo para o usuario
 		self.textoo= tk.StringVar()
 		self.textoo.set('Escolha um serviço do SPA')
 		escrever= tk.Label(self.tela_user,textvariable=self.textoo,font=('Comic Sans MS',15)).place(x=40,y=20)
 
+		#Organização das comboboxes
 		self.texto6= tk.StringVar()
-		self.texto6.set('Serviços:')
+		self.texto6.set('Serviços:') #Itens selecionados que foram apresentados para os usuarios
 		self.texto8= tk.StringVar()
-		self.texto8.set('Total:')
+		self.texto8.set('Total:') #Total apresentado para o usuario
 		self.combo6=ttk.Combobox(self.tela_user)
 		self.combo6.place(x=10,y=100,width=160)
-		self.combo6['values']=('Escolha um serviço','Unha da mão-R$15,00','Unha do pé-R$20,00','Massagem-R$45,00 ')
+		self.combo6['values']=('Escolha um serviço','Unha da mão-R$15,00','Unha do pé-R$20,00','Massagem-R$45,00 ') #valores da combobox
 		self.combo6.current(0)
 		self.combo8=ttk.Combobox(self.tela_user)
 		self.combo8.place(x=300,y=100,width=200)
 		self.combo8['values']=('Escolha um horario de chegada','9:00','10:00','11:00','12:00','14:00','15:00')
 		self.combo8.current(0)
-		botao6=tk.Button(self.tela_user,command=self.pegars, text='Adicionar').place(x=80,y=150)
-		botao8=tk.Button(self.tela_user,command=self.finalizars, text='Finalizar').place(x=80,y=180)
+		botao6=tk.Button(self.tela_user,command=self.pegars, text='Adicionar').place(x=80,y=150) #Botão para juntar os itens
+		botao8=tk.Button(self.tela_user,command=self.finalizars, text='Finalizar').place(x=80,y=180) #Botão para o calculo do total
 		etiqueta6= tk.Label(self.tela_user,textvariable=self.texto6).place(x=40,y=210)
 		etiqueta8= tk.Label(self.tela_user,textvariable=self.texto8).place(x=40,y=240)
 		#self.ph=tk.PhotoImage(file="massagemmulher.png")
 		# fazer:  image= tk.Image.open()
 
-
+	#Pegando os itens do spa
 	def pegars(self):
 		if self.combo6.get()!='Escolha um serviço':
 			self.S.append(self.combo6.get())
@@ -110,7 +115,7 @@ class hotel:
 			self.H.append(self.combo8.get())
 		self.texto6.set('Serviços: ' + str(self.S))
 		
-
+	#Fazendo a conta dos itens do spa e os adiconando ao firebase
 	def finalizars(self):
 		self.texto8.set('Total: R$'+ str(sum(self.V)) +',00')
 		f.get('/spa',None)
@@ -121,21 +126,24 @@ class hotel:
 		f.put('/totalspa',teste,sum(self.V))
 		f.put('/horariospa',teste,self.H)
 		self.texto3= tk.StringVar()
-		self.texto3.set('Seu horário foi reservado!')
+		self.texto3.set('Seu horário foi reservado!') #feedback para o usuario
 		feedback= tk.Label(self.tela_user,textvariable=self.texto3).place(x=100,y=300)
 
 
 
 	def servicodequarto(self):
-		self.textoo= tk.StringVar()
+
+		#informação para o usuário
+		self.textoo= tk.StringVar() 
 		self.textoo.set('Escolha seu pedido. Se quiser adicionar mais de um do mesmo topico, tenha certeza de que os outros não estao selecionados.')
 		escrever= tk.Label(self.tela_user,textvariable=self.textoo,font=(None,10)).place(x=40,y=20)
 			
+
 		self.texto= tk.StringVar()
 		self.texto2=tk.StringVar()
-		self.texto.set('Pedido: ')
-		self.texto2.set('Total: ')
-		self.combo=ttk.Combobox(self.tela_user)
+		self.texto.set('Pedido: ') #Itens selecionados que foram apresentados para os usuarios
+		self.texto2.set('Total: ') #Total apresentado para o usuario
+		self.combo=ttk.Combobox(self.tela_user) #criando combobox
 		self.combo2=ttk.Combobox(self.tela_user)
 		self.combo3=ttk.Combobox(self.tela_user)
 		self.combo4=ttk.Combobox(self.tela_user)
@@ -143,7 +151,7 @@ class hotel:
 		self.combo2.place(x=200,y=100,width=200)
 		self.combo3.place(x=430,y=100,width=160)
 		self.combo4.place(x=630,y=100,width=160)
-		self.combo['values']=('Escolha uma entrada','salame-R$2,00','batata-R$5,00')
+		self.combo['values']=('Escolha uma entrada','salame-R$2,00','batata-R$5,00') #valores da combobox
 		self.combo2['values']=('Escolha um prato principal','Penne a Bolognesa-R$35,00','Filet ao molho de mostarda-R$40,00')
 		self.combo3['values']=('Escolha uma sobremesa','Torta de Morango-R$15,00','Petit Gateau-R$20,00')
 		self.combo4['values']=('Escolha uma bebida','Refrigerante-R$5,00','Agua-R$3,00','Suco Natural-R$8,00')
@@ -156,7 +164,7 @@ class hotel:
 		etiqueta= tk.Label(self.tela_user,textvariable=self.texto).place(x=40,y=210)
 		etiqueta2= tk.Label(self.tela_user,textvariable=self.texto2).place(x=40,y=240)
 
-
+		#Pegando os itens do serviço de quarto e os adicionando a lista de produto e valor
 	def pegar(self):
 		if self.combo2.get()!='Escolha um prato principal':
 			self.A.append(self.combo2.get())
@@ -172,7 +180,7 @@ class hotel:
 			self.B.append(self.bebida[self.combo4.get()])
 		self.texto.set('Pedidos: ' + str(self.A))
 		
-
+	#Fazendo a conta dos itens do serviço de quarto e os adiconando ao firebase
 	def finalizar(self):	
 		self.texto2.set('Total: R$'+ str(sum(self.B)) +',00')
 		f.get('/servico',None)
@@ -184,7 +192,10 @@ class hotel:
 		self.texto3.set('Seu pedido foi feito. Estamos a caminho.')
 		feedback= tk.Label(self.tela_user,textvariable=self.texto3).place(x=100,y=300)
 
+
 	def reportarproblemas(self):
+
+		#setando o conteudo
 		self.conteudo_label = tk.StringVar()
 		label = tk.Label(self.tela_user)
 		label.configure(textvariable=self.conteudo_label)
@@ -193,11 +204,12 @@ class hotel:
 
 		self.conteudo_caixa_texto = tk.StringVar()
 		
+		#fazendo caixa de texto
 		caixa_texto = tk.Entry(self.tela_user)
 		caixa_texto.configure(textvariable=self.conteudo_caixa_texto)
 		caixa_texto.grid(row=1, column=0, padx=20, sticky="ew")
 
-		        
+		#fazendo botao para comprar  
 		botão = tk.Button(self.tela_user)
 		botão.configure(text="Postar")
 		botão.configure(command=self.postarprob)
@@ -208,10 +220,12 @@ class hotel:
 	def postarprob(self):
 		self.conteudo_label.set(self.conteudo_caixa_texto.get())
 
+		#adicionar ao firebase
 		f.get('/users',None)
 		teste = self.q
 		f.put('/users',teste,str(self.conteudo_label.get()))
 
+		#feedback para o usuario
 		self.texto4= tk.StringVar()
 		self.texto4.set('Estamos a caminho.')
 		feedback4= tk.Label(self.tela_user,textvariable=self.texto4).place(x=100,y=250)
@@ -219,15 +233,17 @@ class hotel:
 
 	def inform(self):
 
-		Lb1 = tk.Listbox(self.tela_user,width=30,height=4)
+		Lb1 = tk.Listbox(self.tela_user,width=30,height=4) #criando listbox
 		Lb1.place(x=0, y=0)
-		now = time.strftime("%H:%M:%S")
+		now = time.strftime("%H:%M:%S") #pegando o tempo para determinar cor pelo horário
 
+		#informações nas listboxes
 		Lb1.insert(0, "Café da manhã:  07:00h as 10:30h")
 		Lb1.insert(1, "Almoco:  12:00h as 15:00h")
 		Lb1.insert(2, "Jantar:  18:00h as 22:00h")
 		Lb1.insert(3, "Piscina: 08:00h as 22:00h")
 
+		#listbox de legenda de cor
 		Lb2 = tk.Listbox(self.tela_user,width=30,height=2)
 		Lb2.place(x=100, y=0)
 		Lb2.insert(0, "Fechado")
@@ -265,6 +281,7 @@ app.iniciar()
 
 
 #trocar lugar spa cmbobox
+#adicionar fotos
 #arrumar pedidos
 #clicar no ok + de 3 vzs pos pedido
 #ajustar feeedback
